@@ -7,6 +7,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 
 	"tzh.com/re/base"
 )
@@ -25,6 +26,8 @@ func extractImg(html string) []string {
 }
 
 func downloadImg(url string) {
+	fmt.Println(time.Now())
+	time.Sleep(5 * time.Second)
 	names := strings.Split(url, "/")
 	filename := "./img/" + strings.Split(strings.Split(names[len(names)-1], "&")[0], "?")[0]
 
@@ -54,6 +57,16 @@ func downloadImg(url string) {
 	}
 }
 
+func downloadImgAsync(url string, c chan int, a chan int) {
+	go func() {
+		// 会等待, 直到进去
+		c <- 1
+		downloadImg(url)
+		<-c
+		a <- 1
+	}()
+}
+
 func main() {
 	os.RemoveAll("./img")
 	os.Mkdir("./img", 0755)
@@ -61,9 +74,16 @@ func main() {
 	html := base.GetHtml("https://ent.163.com/")
 	urls := extractImg(html)
 
+	c := make(chan int, 5) // 并发控制
+	a := make(chan int, 3) // 整体控制
+
 	fmt.Println(len(urls))
 	for _, url := range urls {
-		downloadImg(url)
+		go downloadImgAsync(url, c, a)
+	}
+
+	for i := 0; i < len(urls); i++ {
+		<-a
 	}
 
 	files, _ := os.ReadDir("./img")
