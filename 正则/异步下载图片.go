@@ -55,6 +55,7 @@ func downloadImg(url string) {
 		fmt.Printf("下载失败: %v, error: %v \n", url, err)
 		return
 	}
+	fmt.Printf("下载成功: %v \n", url)
 }
 
 func downloadImgAsync(url string, c chan int, a chan int) {
@@ -63,6 +64,7 @@ func downloadImgAsync(url string, c chan int, a chan int) {
 		c <- 1
 		downloadImg(url)
 		<-c
+		// a 又是在等待什么
 		a <- 1
 	}()
 }
@@ -74,8 +76,8 @@ func main() {
 	html := base.GetHtml("https://ent.163.com/")
 	urls := extractImg(html)
 
-	c := make(chan int, 5) // 并发控制
-	a := make(chan int, 3) // 整体控制
+	c := make(chan int, 5) // 并发控制, c 里面最多同时进入 5 个, 所以下载的并发数最多是 5
+	a := make(chan int, 3) // 整体控制, a
 
 	fmt.Println(len(urls))
 	for _, url := range urls {
