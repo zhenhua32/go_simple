@@ -2,6 +2,7 @@ package filedirs
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"os"
 	"strings"
@@ -43,11 +44,25 @@ func CapitalizerExample() error {
 	if err := Capitalizer(f1, f2); err != nil {
 		return err
 	}
+	if err := f1.Close(); err != nil {
+		return err
+	} else {
+		fmt.Println("close file1")
+	}
+	if err := f2.Close(); err != nil {
+		return err
+	} else {
+		fmt.Println("close file2")
+	}
 	if err := os.Remove("file1.txt"); err != nil {
 		return err
+	} else {
+		fmt.Println("remove file1")
 	}
 	if err := os.Remove("file2.txt"); err != nil {
 		return err
+	} else {
+		fmt.Println("remove file2")
 	}
 
 	return nil

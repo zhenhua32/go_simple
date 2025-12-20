@@ -2,11 +2,13 @@ package filedirs
 
 import (
 	"errors"
+	"fmt"
+	"io"
 	"os"
 )
 
 func Operate() error {
-	if err := os.Mkdir("example_dir", os.FileMode(0755)); err != nil {
+	if err := os.MkdirAll("example_dir", os.FileMode(0755)); err != nil {
 		return err
 	}
 
@@ -33,6 +35,12 @@ func Operate() error {
 
 	f, err = os.Open("test.txt")
 	if err != nil {
+		return err
+	}
+
+	io.Copy(os.Stdout, f)
+	fmt.Println("-----")
+	if err := f.Close(); err != nil {
 		return err
 	}
 
