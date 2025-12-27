@@ -52,9 +52,9 @@ func (m *MenuConf) GetSubmenu() *flag.FlagSet {
 
 func (m *MenuConf) Greet(name string) {
 	if m.Goodbye {
-		fmt.Println("Goodbye" + name + "!")
+		fmt.Println("Goodbye " + name + "!")
 	} else {
-		fmt.Println("Hello" + name + "!")
+		fmt.Println("Hello " + name + "!")
 	}
 }
 
