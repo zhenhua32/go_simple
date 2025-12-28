@@ -3,5 +3,5 @@
 https://github.com/PacktPublishing/Go-Programming-Cookbook-Second-Edition/tree/master
 
 ```bash
-go mod init book2/ch2/signals
+go mod init book2/ch2/ansicolor
 ```
