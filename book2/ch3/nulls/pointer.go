@@ -28,6 +28,7 @@ func PointerEncoding() error {
 	}
 	fmt.Printf("pointer unmarshal, with age=0,: %+v\n", e)
 
+	*e.Age = 10
 	value, err = json.Marshal(&e)
 	if err != nil {
 		return err
