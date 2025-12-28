@@ -24,7 +24,7 @@ func CatchSig(ch chan os.Signal, done chan bool) {
 }
 
 func main() {
-	signals := make(chan os.Signal)
+	signals := make(chan os.Signal, 1)
 	done := make(chan bool)
 
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
