@@ -3,5 +3,5 @@
 https://github.com/PacktPublishing/Go-Programming-Cookbook-Second-Edition/tree/master
 
 ```bash
-go mod init book2/ch5/tcp
+go mod init book2/ch5/udp
 ```
