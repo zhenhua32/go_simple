@@ -7,6 +7,7 @@ import (
 
 const addr = "localhost:8080"
 
+// 需要在当前目录下运行 go run ./  不能指定 main.go
 func main() {
 	conns := &connections{
 		addrs: make(map[string]*net.UDPAddr),

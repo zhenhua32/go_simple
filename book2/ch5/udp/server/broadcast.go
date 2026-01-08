@@ -14,15 +14,19 @@ type connections struct {
 
 func broadcast(conn *net.UDPConn, conns *connections) {
 	count := 0
-	conns.mu.Lock()
-	for _, retAddr := range conns.addrs {
-		msg := fmt.Sprintf("Sent %d", count)
-		if _, err := conn.WriteToUDP([]byte(msg), retAddr); err != nil {
-			fmt.Printf("error encountered: %s", err.Error())
-			continue
+	for {
+		conns.mu.Lock()
+		for _, retAddr := range conns.addrs {
+			fmt.Println("send msg to ", retAddr)
+			msg := fmt.Sprintf("Sent %d", count)
+			if _, err := conn.WriteToUDP([]byte(msg), retAddr); err != nil {
+				fmt.Printf("error encountered: %s", err.Error())
+				continue
+			}
 		}
-	}
 
-	conns.mu.Unlock()
-	time.Sleep(1 * time.Second)
+		conns.mu.Unlock()
+		time.Sleep(1 * time.Second)
+		count++
+	}
 }
