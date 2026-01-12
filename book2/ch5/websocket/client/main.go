@@ -21,7 +21,7 @@ func main() {
 	signal.Notify(interrupt, os.Interrupt)
 
 	u := "ws://localhost:8000/"
-	log.Panicf("connecting to %s", u)
+	log.Printf("connecting to %s", u)
 
 	c, _, err := websocket.DefaultDialer.Dial(u, nil)
 	if err != nil {
