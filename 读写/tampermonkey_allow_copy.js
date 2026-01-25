@@ -36,15 +36,16 @@
     }
 
     // 2. 需要解除限制的事件列表
-    const events = ['copy', 'cut', 'contextmenu', 'selectstart', 'dragstart', 'mousedown', 'mouseup'];
+    // 注意：不要拦截 mousedown/mouseup/dragstart，否则会影响视频进度条拖动、滑块控件等正常交互
+    const eventsToIntercept = ['copy', 'cut', 'contextmenu', 'selectstart'];
+    
+    // 需要清理 DOM 属性的完整事件列表
+    const eventsToClean = ['copy', 'cut', 'contextmenu', 'selectstart', 'dragstart', 'mousedown', 'mouseup'];
 
-    // 3. 在捕获阶段拦截事件
-    events.forEach(evt => {
+    // 3. 在捕获阶段拦截事件（仅针对复制相关事件）
+    eventsToIntercept.forEach(evt => {
         window.addEventListener(evt, function(e) {
-            // 注意：这是一种较"暴力"的解锁方式。
-            // 它的原理是：事件在捕获阶段就停止传播，这样网页上定义的"禁止复制"脚本（通常在冒泡阶段）就不会被触发。
-            // 副作用：可能会让一些复杂的 Web 应用（如在线文档编辑器、右键有自定义菜单的网站）功能失效。
-            // 如果遇到正常交互受阻，请在插件菜单中临时关闭此脚本。
+            // 原理：事件在捕获阶段就停止传播，这样网页上定义的"禁止复制"脚本（通常在冒泡阶段）就不会被触发。
             e.stopImmediatePropagation();
         }, true);
     });
@@ -54,7 +55,7 @@
         const doc = document;
         const body = document.body;
         
-        events.forEach(evt => {
+        eventsToClean.forEach(evt => {
             const onEvt = 'on' + evt;
             // 清除 document 上的属性
             if (doc && doc[onEvt]) doc[onEvt] = null;
